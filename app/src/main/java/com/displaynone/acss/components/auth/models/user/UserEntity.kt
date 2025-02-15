@@ -1,4 +1,6 @@
 package com.displaynone.acss.components.auth.models.user
 
-class UserEntity {
-}
+data class UserEntity(
+    val login: String,
+    val password: String,
+)

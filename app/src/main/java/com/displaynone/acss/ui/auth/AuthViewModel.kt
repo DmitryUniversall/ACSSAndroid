@@ -1,4 +1,13 @@
 package com.displaynone.acss.ui.auth
 
-class AuthViewModel {
+import androidx.lifecycle.ViewModel
+import com.displaynone.acss.components.auth.models.user.UserServiceST
+
+class AuthViewModel(
+    private val userServiceST: UserServiceST,
+): ViewModel() {
+
+    fun login(login: String, password: String){
+
+    }
 }
