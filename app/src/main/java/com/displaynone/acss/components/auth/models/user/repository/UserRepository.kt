@@ -1,12 +1,15 @@
 package com.displaynone.acss.components.auth.models.user.repository
 
 import android.util.Log
+import com.displaynone.acss.components.auth.models.user.AuthTokenManager
+import com.displaynone.acss.components.auth.models.user.AuthTokenPair
 import com.displaynone.acss.config.Constants.serverUrl
 import com.displaynone.acss.config.Network
 import com.displaynone.acss.components.auth.models.user.repository.dto.RegisterUserDto
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
@@ -17,6 +20,8 @@ import io.ktor.http.contentType
 import io.ktor.http.encodeURLPath
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.JsonObject
+import kotlin.math.log
 
 class UserRepository(
 
@@ -24,16 +29,28 @@ class UserRepository(
     suspend fun isUserExist(login: String): Result<Boolean> = withContext(Dispatchers.IO) {
         runCatching {
             val encodedLogin = login.encodeURLPath()
-            val result = Network.client.get("$serverUrl/api/person/username/$encodedLogin")
+            val result = Network.client.get("$serverUrl/api/$encodedLogin/auth/")
             result.status != HttpStatusCode.OK
         }
     }
-    suspend fun login(token: String): Result<Unit> = withContext(Dispatchers.IO) {
+    suspend fun login(login: String): Result<AuthTokenPair> = withContext(Dispatchers.IO) {
         runCatching {
-            val result = Network.client.get("$serverUrl/api/person/login") {
+            val result = Network.client.get("$serverUrl/api/$login") {
+                setBody(login)
+            }
+            if (result.status != HttpStatusCode.OK) {
+                error("Status ${result.status}: ${result.body<String>()}")
+            }
+            result.body()
+        }
+    }
+    suspend fun openDoor(token: String, code: Long): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            val result = Network.client.patch("$serverUrl/api/open") {
                 headers {
                     append(HttpHeaders.Authorization, token)
                 }
+                setBody("""{"value":$code}""")
             }
             if (result.status != HttpStatusCode.OK) {
                 error("Status ${result.status}: ${result.body<String>()}")
@@ -41,6 +58,7 @@ class UserRepository(
             Unit
         }
     }
+
     suspend fun register(login: String, password: String): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {

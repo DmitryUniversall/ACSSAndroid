@@ -6,15 +6,23 @@ class UserMapper {
 
     fun fromDto(userDTO: UserDTO): UserEntity {
         val userEntity = UserEntity(
+            id = userDTO.id,
             login = userDTO.login,
-            password = userDTO.password,
+            position = userDTO.position,
+            name = userDTO.name,
+            lastVisit = userDTO.lastVisit,
+            photo = userDTO.photo
         )
         return userEntity
     }
     fun toDTO(userEntity: UserEntity): UserDTO {
         val userDto = UserDTO(
+            id = userEntity.id,
             login = userEntity.login,
-            password = userEntity.password,
+            name = userEntity.name,
+            photo = userEntity.photo,
+            position = userEntity.position,
+            lastVisit = userEntity.lastVisit,
         )
         return userDto
     }
