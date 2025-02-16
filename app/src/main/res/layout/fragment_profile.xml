@@ -83,7 +83,7 @@
                     android:background="?android:attr/colorBackground"
                     android:textColor="?attr/colorOnBackground"
                     android:text="Дата и время последнего входа" />
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -91,7 +91,9 @@
                     android:padding="12dp"
                     android:textSize="16sp"
                     android:textColor="@color/white"
-                    android:backgroundTint="#0D6EFD" />
+                    app:cornerRadius="8dp"
+                    app:backgroundTint="@color/primary"
+                    app:rippleColor="@color/white"/>
 
                 <TextView
                     android:visibility="gone"

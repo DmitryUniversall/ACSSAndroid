@@ -1,9 +1,13 @@
 package com.displaynone.acss.ui.auth
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.displaynone.acss.R
@@ -34,21 +38,29 @@ class AuthFragment: Fragment(R.layout.fragment_auth) {
                 Action.GotoProfile -> navigateTo(view, R.id.action_authFragment_to_profileFragment)
             }
         }
-//        viewModel.action.collectWithLifecycle(this) { action ->
-//            if (action is AuthViewModel.Action.GotoProfile){
-//
-//            }
-//        }
+        viewModel.errorState.collectWithLifecycle(this) { errorMessage ->
+            errorMessage?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
+        binding.next.setOnClickListener{
+            onLoginButtonClicked(view)
+        }
     }
 
 
     private fun setupLoginButton() {
         binding.login.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            @SuppressLint("ResourceAsColor")
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.error.visibility = View.GONE
                 val username = s.toString()
-                binding.login.isEnabled = isUsernameValid(username)
+                val valid = isUsernameValid(username)
+                binding.hint.visibility = if(valid) View.INVISIBLE else View.VISIBLE
+                binding.next.isEnabled = valid
+                val color = if (valid) R.color.primary else R.color.secondary
+                binding.next.backgroundTintList = ContextCompat.getColorStateList(requireContext(), color)
             }
 
             override fun afterTextChanged(s: Editable?) {}

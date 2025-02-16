@@ -5,5 +5,6 @@
     <string name="hello">Hello</string>
     <string name="continue_">Continue</string>
     <string name="logout">logout</string>
+    <string name="login_hint">Login must be at least 3 characters long,\nstart with a letter,\ncontain only letters and numbers.</string>
 
 </resources>

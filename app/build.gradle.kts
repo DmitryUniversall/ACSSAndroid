@@ -38,6 +38,15 @@ android {
 }
 
 dependencies {
+//    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+//
+//    val cameraX = "1.3.4"
+//    implementation("androidx.camera:camera-core:$cameraX")
+//    implementation("androidx.camera:camera-camera2:$cameraX")
+//    implementation("androidx.camera:camera-lifecycle:$cameraX")
+//    implementation("androidx.camera:camera-view:$cameraX")
+//    implementation("androidx.camera:camera-mlkit-vision:1.4.0-rc04")
+
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("io.ktor:ktor-client-core:3.0.3")

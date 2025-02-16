@@ -1,15 +1,16 @@
 package com.displaynone.acss.components.auth.models.user
 
 import android.content.Context
+import android.util.Log
 import com.displaynone.acss.components.auth.models.user.repository.UserRepository
+import com.displaynone.acss.components.auth.models.user.repository.dto.UserDTO
+import io.ktor.client.statement.bodyAsText
 
 
-@Suppress("UNREACHABLE_CODE")
 class UserServiceST(
     private val tokenManager: AuthTokenManager,
 ) {
     private val userRepository: UserRepository = UserRepository()
-    private var instance: UserServiceST? = null
 
     companion object {
         private var instance: UserServiceST? = null
@@ -21,18 +22,24 @@ class UserServiceST(
             }
         }
 
-        fun getInstance(): UserServiceST? {
-            return instance
+        fun getInstance(): UserServiceST {
+            return instance ?: throw RuntimeException("null instance")
         }
     }
     suspend fun login(login: String): Result<Unit>{
-        userRepository.login(login = login).fold(
-            onSuccess = { data ->
-                tokenManager.saveTokens(data) },
-            onFailure = error(message = "Login error")
-        )
+        return runCatching {
+            userRepository.login(login = login).getOrThrow().let { data ->
+                tokenManager.saveTokens(data)
+            }
+        }
     }
     fun logout(){
         tokenManager.clear()
+    }
+    suspend fun getInfo(): Result<UserDTO>{
+        if (!tokenManager.hasTokens()) {
+            throw RuntimeException("access token is null")
+        }
+        return userRepository.getInfo(tokenManager.authTokenPair!!.accessToken)
     }
 }

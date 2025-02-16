@@ -6,12 +6,14 @@ import com.displaynone.acss.components.auth.models.user.AuthTokenPair
 import com.displaynone.acss.config.Constants.serverUrl
 import com.displaynone.acss.config.Network
 import com.displaynone.acss.components.auth.models.user.repository.dto.RegisterUserDto
+import com.displaynone.acss.components.auth.models.user.repository.dto.UserDTO
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -41,6 +43,21 @@ class UserRepository(
             if (result.status != HttpStatusCode.OK) {
                 error("Status ${result.status}: ${result.body<String>()}")
             }
+            Log.d("UserRepository", result.bodyAsText())
+            result.body()
+        }
+    }
+    suspend fun getInfo(token: String): Result<UserDTO> = withContext(Dispatchers.IO){
+        runCatching {
+            val result = Network.client.get("$serverUrl/api/users/me") {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $token")
+                }
+            }
+            if (result.status != HttpStatusCode.OK) {
+                error("Status ${result.status}: ${result.body<String>()}")
+            }
+            Log.d("UserRepository", result.bodyAsText())
             result.body()
         }
     }
