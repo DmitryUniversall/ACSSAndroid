@@ -7,6 +7,7 @@ import com.displaynone.acss.config.Constants.serverUrl
 import com.displaynone.acss.config.Network
 import com.displaynone.acss.components.auth.models.user.repository.dto.RegisterUserDto
 import com.displaynone.acss.components.auth.models.user.repository.dto.UserDTO
+import com.google.gson.Gson
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
@@ -22,6 +23,7 @@ import io.ktor.http.contentType
 import io.ktor.http.encodeURLPath
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlin.math.log
 
@@ -37,14 +39,23 @@ class UserRepository(
     }
     suspend fun login(login: String): Result<AuthTokenPair> = withContext(Dispatchers.IO) {
         runCatching {
-            val result = Network.client.get("$serverUrl/api/$login") {
-                setBody(login)
+            val result = Network.client.post("$serverUrl/api/auth/login") {
+                headers {
+                    append(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                }
+                setBody("""{ "login": "$login" }""")
             }
             if (result.status != HttpStatusCode.OK) {
                 error("Status ${result.status}: ${result.body<String>()}")
             }
+//            val gson = Gson()
+//            val tokenPair = gson.fromJson(result.bodyAsText(), AuthTokenPair::class.java)
             Log.d("UserRepository", result.bodyAsText())
-            result.body()
+//            result.body()
+            val tokenPair = Json.decodeFromString<AuthTokenPair>(result.bodyAsText())
+            Result.success(tokenPair)
+        }.getOrElse { exception ->
+            Result.failure(exception)
         }
     }
     suspend fun getInfo(token: String): Result<UserDTO> = withContext(Dispatchers.IO){

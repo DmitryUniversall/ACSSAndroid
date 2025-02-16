@@ -68,7 +68,7 @@ class AuthFragment: Fragment(R.layout.fragment_auth) {
     }
 
     private fun isUsernameValid(username: String): Boolean {
-        val alf = "^[a-zA-Z0-9]+$".toRegex()
+        val alf = "^[a-zA-Z0-9_]+$".toRegex()
         return username.isNotEmpty() &&
                 username.length >= 3 &&
                 !username[0].isDigit() &&

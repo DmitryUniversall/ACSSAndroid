@@ -26,13 +26,18 @@ class AuthViewModel(): ViewModel() {
 
     fun login(login: String){
         viewModelScope.launch {
-            UserServiceST.getInstance().login(login).fold(
-                onSuccess = {openProfile() },
-                onFailure = { error ->
-                    Log.e("AuthViewModel",error.message?: "Ошибка входа")
-                    _errorState.value = error.message ?: "Ошибка входа"
-                }
-            )
+            try {
+                UserServiceST.getInstance().login(login).fold(
+                    onSuccess = { openProfile() },
+                    onFailure = { error ->
+                        Log.e("AuthViewModel", "Login failed: ${error.message ?: "Unknown error"}")
+                        _errorState.value = error.message ?: "Ошибка входа"
+                    }
+                )
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Connection error: ${e.message}")
+                _errorState.value = "Проблемы с подключением. Повторите попытку позже."
+            }
         }
     }
     private fun openProfile() {

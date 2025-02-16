@@ -47,7 +47,9 @@ dependencies {
 //    implementation("androidx.camera:camera-view:$cameraX")
 //    implementation("androidx.camera:camera-mlkit-vision:1.4.0-rc04")
 
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    implementation("com.google.code.gson:gson:2.8.8")
+//    implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("io.ktor:ktor-client-core:3.0.3")
     implementation("io.ktor:ktor-client-cio:3.0.3")
