@@ -15,12 +15,6 @@ import com.displaynone.acss.databinding.FragmentAuthBinding
 import com.displaynone.acss.util.collectWithLifecycle
 import com.displaynone.acss.util.navigateTo
 import com.displaynone.acss.ui.auth.AuthViewModel.Action
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlin.math.log
 
 class AuthFragment: Fragment(R.layout.fragment_auth) {
     private var _binding: FragmentAuthBinding? = null
@@ -41,6 +35,8 @@ class AuthFragment: Fragment(R.layout.fragment_auth) {
         viewModel.errorState.collectWithLifecycle(this) { errorMessage ->
             errorMessage?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                binding.errorTitle.text = errorMessage
+                binding.errorTitle.visibility = View.VISIBLE
             }
         }
         binding.next.setOnClickListener{

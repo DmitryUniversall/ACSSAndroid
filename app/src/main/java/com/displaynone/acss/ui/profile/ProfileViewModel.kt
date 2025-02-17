@@ -1,12 +1,10 @@
-package com.displaynone.acss.ui.fragment
+package com.displaynone.acss.ui.profile
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.displaynone.acss.components.auth.models.user.UserServiceST
 import com.displaynone.acss.components.auth.models.user.repository.dto.UserDTO
-import com.displaynone.acss.databinding.FragmentProfileBinding
-import com.displaynone.acss.util.navigateTo
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,18 +43,19 @@ class ProfileViewModel(): ViewModel() {
             _action.send(Action.GoToAuth)
         }
     }
+    fun openScan(){
+        viewModelScope.launch {
+            _action.send(Action.GoToScan)
+        }
+    }
     sealed interface State {
         data object Loading : State
         data class Show(
             val item: UserDTO
         ) : State
-
-        data object Changed : State
-        data class Error(
-            val text: String
-        ) : State
     }
     sealed interface Action {
         data object GoToAuth: Action
+        data object GoToScan: Action
     }
 }

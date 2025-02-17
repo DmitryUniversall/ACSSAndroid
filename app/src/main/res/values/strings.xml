@@ -6,5 +6,13 @@
     <string name="continue_">Continue</string>
     <string name="logout">logout</string>
     <string name="login_hint">Login must be at least 3 characters long,\nstart with a letter,\ncontain only letters and numbers.</string>
+    <string name="close_button">Close</string>
+    <string name="scan">Scan</string>
+    <string name="cancel">Вход был отменён</string>
+    <string name="success">Успешно</string>
+    <string name="wrong">Что-то пошло не так</string>
+    <string name="error401">Логина не существует или неверный</string>
+    <string name="ok">ОК</string>
+    <string name="error">Error</string>
 
 </resources>

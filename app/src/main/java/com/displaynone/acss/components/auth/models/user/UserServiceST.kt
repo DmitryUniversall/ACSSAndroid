@@ -1,10 +1,8 @@
 package com.displaynone.acss.components.auth.models.user
 
 import android.content.Context
-import android.util.Log
 import com.displaynone.acss.components.auth.models.user.repository.UserRepository
 import com.displaynone.acss.components.auth.models.user.repository.dto.UserDTO
-import io.ktor.client.statement.bodyAsText
 
 
 class UserServiceST(
@@ -41,5 +39,8 @@ class UserServiceST(
             throw RuntimeException("access token is null")
         }
         return userRepository.getInfo(tokenManager.authTokenPair!!.accessToken)
+    }
+    suspend fun openDoor(code: String): Result<Int> {
+        return userRepository.openDoor(tokenManager.authTokenPair!!.accessToken, code = code)
     }
 }

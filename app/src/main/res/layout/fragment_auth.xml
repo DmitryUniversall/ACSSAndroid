@@ -104,6 +104,18 @@
                 android:textColor="@color/danger"
                 android:textSize="15sp"
                 android:gravity="left"/>
+            <TextView
+                android:id="@+id/error_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:letterSpacing="0.05"
+                android:background="?android:attr/colorBackground"
+                android:textColor="@color/danger"
+                tools:text="@string/error"
+                android:layout_marginBottom="20dp" />
 
 
         </LinearLayout>

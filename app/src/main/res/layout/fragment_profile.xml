@@ -94,6 +94,17 @@
                     app:cornerRadius="8dp"
                     app:backgroundTint="@color/primary"
                     app:rippleColor="@color/white"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/scan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scan"
+                    android:padding="12dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    app:cornerRadius="8dp"
+                    app:backgroundTint="@color/primary"
+                    app:rippleColor="@color/white"/>
 
                 <TextView
                     android:visibility="gone"

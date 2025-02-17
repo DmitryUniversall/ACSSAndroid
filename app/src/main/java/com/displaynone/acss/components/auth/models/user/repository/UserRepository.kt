@@ -58,6 +58,21 @@ class UserRepository(
             Result.failure(exception)
         }
     }
+    suspend fun openDoor(token: String, code: String): Result<Int> = withContext(Dispatchers.IO){
+        runCatching{
+            val result = Network.client.post("$serverUrl/api/opendoor") {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $token")
+                }
+                setBody("""{ "code": "$code" }""")
+            }
+            if (result.status != HttpStatusCode.OK) {
+                error("Status ${result.status}: ${result.body<String>()}")
+            }
+            Log.d("UserRepository", result.bodyAsText())
+            result.status.value
+        }
+    }
     suspend fun getInfo(token: String): Result<UserDTO> = withContext(Dispatchers.IO){
         runCatching {
             val result = Network.client.get("$serverUrl/api/users/me") {

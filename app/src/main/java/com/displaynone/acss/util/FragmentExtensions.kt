@@ -6,7 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-
+import androidx.lifecycle.flowWithLifecycle
 fun <T> Flow<T>.collectWithLifecycle(
     fragment: Fragment,
     function: suspend (T) -> Unit
@@ -14,6 +14,16 @@ fun <T> Flow<T>.collectWithLifecycle(
     fragment.viewLifecycleOwner.lifecycleScope.launch {
         fragment.repeatOnLifecycle(Lifecycle.State.STARTED){
             collect{ function.invoke(it) }
+        }
+    }
+}
+inline fun <T> Flow<T>.collectWhenStarted(
+    fragment: Fragment,
+    crossinline collector: (T) -> Unit
+) {
+    fragment.viewLifecycleOwner.lifecycleScope.launch {
+        flowWithLifecycle(fragment.viewLifecycleOwner.lifecycle).collect { value ->
+            collector.invoke(value)
         }
     }
 }
